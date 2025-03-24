@@ -1,6 +1,7 @@
 import snowflake.connector
 import yaml
 import argparse
+import sys
 
 def schema_migration(snowflake_table_name, output_file, snowflake_config_path="snowflake_config.yaml"):
     """
@@ -25,6 +26,7 @@ def schema_migration(snowflake_table_name, output_file, snowflake_config_path="s
             SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_catalog || '.' || table_schema || '.' || table_name = '{snowflake_table_name}'
+            ORDER BY ORDINAL_POSITION
         """
         snowflake_cursor.execute(metadata_query)
         metadata = snowflake_cursor.fetchall()
